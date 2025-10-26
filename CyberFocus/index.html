@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Focus Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* --- Global & Body --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
+  color: #00fff7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+/* --- Heading --- */
+h1 {
+  font-family: 'Orbitron', monospace;
+  font-size: 3rem;
+  color: #ff00f7;
+  text-shadow: 0 0 10px #ff00f7, 0 0 20px #ff00f7;
+  margin-bottom: 10px;
+}
+
+/* --- Timer Display --- */
+.timer-container {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin-bottom: 20px;
+}
+
+.timer-circle {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer-circle circle {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+
+.bg-circle {
+  stroke: rgba(255,255,255,0.1);
+}
+
+.fg-circle {
+  stroke: url(#gradient);
+  stroke-dasharray: 754;
+  stroke-dashoffset: 754;
+  transition: stroke-dashoffset 0.5s linear;
+}
+
+#timer-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Orbitron', monospace;
+  font-size: 3rem;
+  color: #ff00f7;
+  text-shadow: 0 0 5px #ff00f7, 0 0 10px #ff00f7, 0 0 20px #00fff7;
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 5px #ff00f7, 0 0 10px #ff00f7; }
+  50% { text-shadow: 0 0 10px #ff00f7, 0 0 25px #00fff7; }
+  100% { text-shadow: 0 0 15px #ff00f7, 0 0 30px #00fff7; }
+}
+
+/* --- Controls & Settings --- */
+.controls, .settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+input[type=number] {
+  width: 80px;
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+button {
+  background: linear-gradient(135deg, #00fff7, #ff00f7);
+  color: #0a0a0a;
+  border: none;
+  padding: 10px 25px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #00fff7, 0 0 25px #ff00f7;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #00fff7, 0 0 35px #ff00f7;
+}
+
+/* --- XP Bar --- */
+.progress-container {
+  width: 80%;
+  background-color: rgba(255,255,255,0.05);
+  margin: 20px auto;
+  border-radius: 20px;
+  height: 30px;
+  overflow: hidden;
+  box-shadow: 0 0 15px #00fff7;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #00fff7, #ff00f7);
+  width: 0%;
+  text-align: center;
+  line-height: 30px;
+  color: #0a0a0a;
+  font-weight: bold;
+  border-radius: 20px;
+  transition: width 0.5s;
+}
+
+/* --- Info --- */
+.info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ff00f7;
+  text-shadow: 0 0 5px #ff00f7;
+  justify-content: center;
+}
+
+/* --- Confetti --- */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  opacity: 0.7;
+  pointer-events: none;
+  animation: fall 2s linear forwards;
+}
+
+@keyframes fall {
+  to { transform: translateY(500px) rotate(720deg); opacity:0; }
+}
+
+/* --- Mobile responsiveness --- */
+@media(max-width: 400px){
+  .timer-container { width: 200px; height: 200px; }
+  #timer-text { font-size: 2rem; }
+  button { padding: 8px 15px; font-size: 0.9rem; }
+  input[type=number]{ width: 60px; }
+}
+</style>
+</head>
+<body>
+
+<h1>⚡ Cyber Focus Pro</h1>
+
+<!-- Timer Circle with Gradient -->
+<div class="timer-container">
+<svg class="timer-circle">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00fff7" />
+      <stop offset="100%" stop-color="#ff00f7" />
+    </linearGradient>
+  </defs>
+  <circle class="bg-circle" cx="125" cy="125" r="120"></circle>
+  <circle class="fg-circle" cx="125" cy="125" r="120"></circle>
+</svg>
+<div id="timer-text">25:00</div>
+</div>
+
+<div class="settings">
+  <label>Focus Time (min):
+    <input type="number" id="timeInput" value="25" min="1" max="120">
+  </label>
+</div>
+
+<div class="controls">
+  <button id="startPause">Start</button>
+  <button id="reset">Reset</button>
+</div>
+
+<div class="progress-container">
+  <div class="progress-bar" id="xpBar">XP: 0/50</div>
+</div>
+
+<div class="info">
+  <div id="level">Level: 1</div>
+  <div id="streak">Weekly Streak: 0 💥</div>
+</div>
+
+<audio id="startSound" src="https://freesound.org/data/previews/273/273174_5121236-lq.mp3"></audio>
+<audio id="xpSound" src="https://freesound.org/data/previews/178/178186_3244621-lq.mp3"></audio>
+<audio id="levelSound" src="https://freesound.org/data/previews/240/240777_4062626-lq.mp3"></audio>
+
+<script>
+// ----- Variables -----
+let time = 25*60;
+let running = false;
+let xp = 0;
+let streak = 0;
+const xpPerLevel = 50;
+const fgCircle = document.querySelector('.fg-circle');
+const radius = 120;
+const circumference = 2 * Math.PI * radius;
+fgCircle.style.strokeDasharray = circumference;
+
+const timerText = document.getElementById('timer-text');
+const xpBar = document.getElementById('xpBar');
+const levelEl = document.getElementById('level');
+const streakEl = document.getElementById('streak');
+const startPauseBtn = document.getElementById('startPause');
+const resetBtn = document.getElementById('reset');
+const timeInput = document.getElementById('timeInput');
+const startSound = document.getElementById('startSound');
+const xpSound = document.getElementById('xpSound');
+const levelSound = document.getElementById('levelSound');
+
+let interval;
+
+// ----- Functions -----
+function formatTime(t){
+  const m = Math.floor(t/60);
+  const s = t%60;
+  return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
+function updateCircle(){
+  const fullTime = parseInt(timeInput.value)*60;
+  const offset = circumference - (time/fullTime)*circumference;
+  fgCircle.style.strokeDashoffset = offset;
+}
+
+function updateUI(){
+  timerText.textContent = formatTime(time);
+  updateCircle();
+  xpBar.style.width = ((xp % xpPerLevel)/xpPerLevel*100) + '%';
+  xpBar.textContent = `XP: ${xp % xpPerLevel}/${xpPerLevel}`;
+  levelEl.textContent = `Level: ${Math.floor(xp/xpPerLevel)+1}`;
+  streakEl.textContent = `Weekly Streak: ${streak} 💥`;
+}
+
+// Confetti animation
+function spawnConfetti(){
+  for(let i=0;i<50;i++){
+    const c = document.createElement('div');
+    c.classList.add('confetti');
+    c.style.left = Math.random()*window.innerWidth+'px';
+    c.style.background = `hsl(${Math.random()*360},100%,50%)`;
+    c.style.width = c.style.height = Math.random()*8+4+'px';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),2000);
+  }
+}
+
+// ----- Event Listeners -----
+startPauseBtn.addEventListener('click', ()=>{
+  running = !running;
+  startPauseBtn.textContent = running?'Pause':'Start';
+  startSound.play();
+  if(running){
+    interval = setInterval(()=>{
+      if(time>0){
+        time--;
+        updateUI();
+      } else {
+        clearInterval(interval);
+        running=false;
+        startPauseBtn.textContent='Start';
+        xp+=10;
+        streak+=1;
+        xpSound.play();
+        if(xp % xpPerLevel === 0) levelSound.play();
+        spawnConfetti();
+        time = parseInt(timeInput.value)*60;
+        updateUI();
+      }
+    },1000);
+  } else clearInterval(interval);
+});
+
+resetBtn.addEventListener('click', ()=>{
+  clearInterval(interval);
+  running = false;
+  startPauseBtn.textContent='Start';
+  time = parseInt(timeInput.value)*60;
+  updateUI();
+});
+
+timeInput.addEventListener('change', ()=>{
+  time = parseInt(timeInput.value)*60;
+  updateUI();
+});
+
+// Initialize
+updateUI();
+</script>
+
+</body>
+</html>
